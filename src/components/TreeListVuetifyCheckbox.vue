@@ -3,16 +3,13 @@
     <v-row no-gutters>
       <v-col cols="12" sm="4">
         <div>
-          <label class="d-inline-flex align-center pl-8 pb-2">
-            <input
-              type="checkbox"
-              :checked="statusSelectedAllOrganization"
-              @input="handleSelectedAllOrganization($event)"
-            />
-            <span class="ml-2">Select All</span>
-          </label>
-          <ul style="list-style: none">
-            <tree-list-item
+          <v-checkbox
+            label="Select All"
+            :input-value="statusSelectedAllOrganization"
+            @change="handleSelectedAllOrganization($event)"
+          ></v-checkbox>
+          <ul class="pl-0" style="list-style: none">
+            <tree-list-vuetify-checkbox-item
               v-for="organization in organizations"
               :key="organization.id"
               :node="organization"
@@ -55,13 +52,13 @@
 
 <script>
 import _ from 'lodash';
-import TreeListItem from './TreeListItem.vue';
+import TreeListVuetifyCheckboxItem from './TreeListVuetifyCheckboxItem.vue';
 
 export default {
-  name: 'TreeList',
+  name: 'TreeListVuetifyCheckbox',
 
   components: {
-    TreeListItem,
+    TreeListVuetifyCheckboxItem,
   },
 
   data() {
@@ -135,8 +132,7 @@ export default {
   },
 
   methods: {
-    handleSelectedAllOrganization(event) {
-      const { checked } = event.target;
+    handleSelectedAllOrganization(checked) {
       this.statusSelectedAllOrganization = checked;
 
       this.organizations.forEach((organization) => {
@@ -153,26 +149,14 @@ export default {
       }
       return node;
     },
-    handleSelectedAllEmployee(e) {
-      const event = {
-        target: {
-          checked: e,
-        },
-      };
-      const { checked } = event.target;
+    handleSelectedAllEmployee(checked) {
       this.employees = this.employees.map((employee) => ({
         ...employee,
         checked,
       }));
-      this.handleSelectedAllOrganization(event);
+      this.handleSelectedAllOrganization(checked);
     },
-    handleSelectedEmployee(e, employee) {
-      const event = {
-        target: {
-          checked: e,
-        },
-      };
-      const { checked } = event.target;
+    handleSelectedEmployee(checked, employee) {
       const { id } = employee;
       this.employees = this.employees.map((employee) => {
         if (employee.id === id) {
