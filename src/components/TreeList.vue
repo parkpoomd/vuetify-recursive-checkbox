@@ -24,14 +24,34 @@
 
       <v-col cols="12" sm="4">
         <div>
-          <label class="d-inline-flex align-center pl-6 pb-2">
+          <div>
+            <v-checkbox
+              label="Select All"
+              :value="statusSelectedAllEmployee === 'all'"
+              :indeterminate="statusSelectedAllEmployee === 'indeterminate'"
+              @change="handleSelectedAllEmployee($event)"
+            ></v-checkbox>
+          </div>
+          <!-- <div class="pl-5 pb-2">
+            <v-icon v-if="statusSelectedAllEmployee === 'all'">
+              mdi-checkbox-outline
+            </v-icon>
+            <v-icon v-if="statusSelectedAllEmployee === 'indeterminate'">
+              mdi-minus-box-outline
+            </v-icon>
+            <v-icon v-if="statusSelectedAllEmployee === 'blank'">
+              mdi-checkbox-blank-outline
+            </v-icon>
+            <span class="ml-2">Select All</span>
+          </div> -->
+          <!-- <label class="d-inline-flex align-center pl-6 pb-2">
             <input
               type="checkbox"
               :checked="statusSelectedAllEmployee"
               @input="handleSelectedAllEmployee($event)"
             />
             <span class="ml-2">Select All</span>
-          </label>
+          </label> -->
           <ul class="pl-6" style="list-style: none">
             <li v-for="employee in employees" :key="employee.id">
               <label>
@@ -127,7 +147,13 @@ export default {
 
   computed: {
     statusSelectedAllEmployee() {
-      return _.every(this.employees, ['checked', true]);
+      if (_.every(this.employees, ['checked', true])) {
+        return 'all';
+      } else if (_.some(this.employees, ['checked', true])) {
+        return 'indeterminate';
+      } else {
+        return 'blank';
+      }
     },
   },
 
@@ -150,7 +176,12 @@ export default {
       }
       return node;
     },
-    handleSelectedAllEmployee(event) {
+    handleSelectedAllEmployee(e) {
+      const event = {
+        target: {
+          checked: e,
+        },
+      };
       const { checked } = event.target;
       this.employees = this.employees.map((employee) => ({
         ...employee,
