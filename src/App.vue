@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <virtual-scroller />
     <div>
       <tree-list />
     </div>
@@ -12,10 +13,12 @@
 <script>
 import TreeList from './components/TreeList.vue';
 import TreeListVuetifyCheckbox from './components/TreeListVuetifyCheckbox.vue';
+import VirtualScroller from './components/VirtualScroller.vue';
 
 export default {
   name: 'App',
 
-  components: { TreeList, TreeListVuetifyCheckbox },
+  components: { TreeList, TreeListVuetifyCheckbox, VirtualScroller },
 };
 </script>
+, VirtualScroller
